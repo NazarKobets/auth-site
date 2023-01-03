@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
+const req = require('express/lib/request');
 
 const app = express();
 
@@ -48,6 +49,11 @@ app.post('/register', (req, res) => {
         }
     });
 });
+
+app.post('/login', function(req, res)) {
+    const username = req.body.username;
+    const password = req.body.password;
+}
 
 app.listen(3000, () => {
     console.log('running on port 3000')
