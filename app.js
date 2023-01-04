@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-mongoose.connect('mongodb://localhost:27017/userDB');
+mongoose.connect('mongodb://127.0.0.1/userDB');
 
 const userSchema = {
     email: String,
@@ -50,10 +50,22 @@ app.post('/register', (req, res) => {
     });
 });
 
-app.post('/login', function(req, res)) {
+app.post('/login', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-}
+
+    User.findOne({ email: username }, (err, foundUser) => {
+        if (err) {
+            console.log(err);
+        } else {
+            if (foundUser) {
+                if (foundUser.password === password) {
+                    res.render('secrets');
+                }
+            }
+        }
+    })
+});
 
 app.listen(3000, () => {
     console.log('running on port 3000')
