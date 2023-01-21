@@ -64,12 +64,14 @@ app.post('/login', (req, res) => {
             console.log(err);
         } else {
             if (foundUser) {
-                if (foundUser.password === password) {
-                    res.render('secrets');
-                }
+                 bcrypt.compare(password, foundUser.password, (err, result) => {
+                    if (result === true) {
+                        res.render('secrets');
+                    }
+                });
             }
         }
-    })
+    });
 });
 
 app.listen(3000, () => {
