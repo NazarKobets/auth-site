@@ -18,14 +18,30 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+app.use(session({
+    secret: 'Our little secret',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 mongoose.connect('mongodb://127.0.0.1/userDB');
 
-const userSchema = new mongoose.mongoose.Schema ({
+const userSchema = new mongoose.Schema ({
     email: String,
     password: String
 });
 
+userSchema.plugin(passportLocalMongoose);
+
 const User = new mongoose.model('User', userSchema);
+
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get('/', (req, res) => {
     res.render('home');
@@ -50,3 +66,5 @@ app.post('/login', (req, res) => {
 app.listen(3000, () => {
     console.log('running on port 3000')
 });
+
+
