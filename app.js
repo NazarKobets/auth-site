@@ -34,7 +34,8 @@ mongoose.connect('mongodb://127.0.0.1/userDB');
 
 const userSchema = new mongoose.Schema ({
     email: String,
-    password: String
+    password: String,
+    googleId: String
 });
 
 userSchema.plugin(passportLocalMongoose);
